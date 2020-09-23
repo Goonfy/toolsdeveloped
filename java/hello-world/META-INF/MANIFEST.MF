@@ -1,0 +1,4 @@
+Main-Class: org.academiadecodigo.restlers.helloworld.HelloWorld
+Manifest-Version: 1.0
+Created-By: 14.0.2 (Oracle Corporation)
+
