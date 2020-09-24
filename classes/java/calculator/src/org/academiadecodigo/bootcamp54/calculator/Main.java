@@ -2,18 +2,13 @@ package org.academiadecodigo.bootcamp54.calculator;
 
 public class Main {
     public static void main(String[] args) {
-        Calculator chinese = new Calculator();
-        Calculator spanish = new Calculator();
+        Calculator chinese = new Calculator("gray", "tlintaetles");
+        Calculator spanish = new Calculator("amarilho", "cucaracha");
 
-        chinese.brand = "tlintaetles";
-        chinese.color = "gray";
+        System.out.println(chinese.add(1, 1));
+        System.out.println(spanish.add(1.4f, 2.5f));
 
-        spanish.brand = "cucaracha";
-        spanish.color = "amarilho";
-
-        chinese.add(1, 1);
-
-        System.out.println(spanish.brand + " " + spanish.color);
-        System.out.println(chinese.brand + " " + chinese.color);
+        System.out.println("Brand: " + spanish.brand + " Color: " + spanish.color);
+        System.out.println("Brand: " + chinese.brand + " Color: " + chinese.color);
     }
 }
