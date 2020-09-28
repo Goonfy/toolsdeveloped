@@ -8,13 +8,19 @@ public class Game {
 
     private Player[] players;
 
-    public Game(int minimum, int maximum, int maxRounds, Player[] players) {
+    public Game(int minimum, int maximum, int maxRounds, int maxPlayers) {
         this.minimum = minimum;
         this.maximum = maximum;
 
         this.maxRounds = maxRounds;
 
-        this.players = players;
+        this.players = new Player[maxPlayers];
+    }
+
+    public void spawnPlayers() {
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player("Player " + i, maxRounds);
+        }
     }
 
     public void start() {
@@ -23,7 +29,7 @@ public class Game {
 
         for (int i = 0; i < maxRounds; i++) {
             for (Player player : players) {
-                player.guess(minimum, maximum);
+                player.guess(minimum, maximum, i);
                 System.out.println("Number " + player.getName() + " guessed: " + player.getGuessedNumber());
 
                 if (player.getGuessedNumber() == numberToGuess) {
