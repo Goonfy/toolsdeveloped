@@ -21,42 +21,38 @@ public class Game {
             checkWinCondition(playerOneHand, playerTwoHand);
         }
 
-        if (playerOne.getScore() > playerTwo.getScore()) {
-            System.out.println("Player " + playerOne.getName() + " Wins the game!!!");
-
-            return;
-        }
-
-        System.out.println("Player " + playerTwo.getName() + " Wins the game!!!");
+        endGame();
     }
 
     private void checkWinCondition(Hand playerOneHand, Hand playerTwoHand) {
         if (playerOneHand == playerTwoHand) {
             System.out.println("It's a tie!!!");
-
             return;
         }
 
-        if (playerOneHand == Hand.PAPER && playerTwoHand == Hand.ROCK) {
-            playerOne.win();
-            System.out.println("Player " + playerOne.getName() + " Wins the round!!!");
+        Player winner = playerOne;
 
-            return;
-        }
-        else if (playerOneHand == Hand.ROCK && playerTwoHand == Hand.SCISSORS) {
-            playerOne.win();
-            System.out.println("Player " + playerOne.getName() + " Wins the round!!!");
-
-            return;
-        }
-        else if (playerOneHand == Hand.SCISSORS && playerTwoHand == Hand.PAPER) {
-            playerOne.win();
-            System.out.println("Player " + playerOne.getName() + " Wins the round!!!");
-
-            return;
+        switch (playerOneHand) {
+            case SCISSORS:
+                winner = playerTwoHand == Hand.PAPER ? playerOne : playerTwo;
+                break;
+            case PAPER:
+                winner = playerTwoHand == Hand.ROCK ? playerOne : playerTwo;
+                break;
+            case ROCK:
+                winner = playerTwoHand == Hand.SCISSORS ? playerOne: playerTwo;
+                break;
         }
 
-        playerTwo.win();
-        System.out.println("Player " + playerTwo.getName() + " Wins the round!!!");
+        winner.win();
+        System.out.println("Player " + winner.getName() + " Wins the round!!!");
+    }
+
+    private void endGame() {
+        Player winner = playerOne;
+
+        if (playerOne.getScore() < playerTwo.getScore()) { winner = playerTwo; }
+
+        System.out.println("Player " + winner.getName() + " Wins the game!!!");
     }
 }
