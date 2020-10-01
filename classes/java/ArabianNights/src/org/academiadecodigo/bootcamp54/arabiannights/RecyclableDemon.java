@@ -23,15 +23,9 @@ public class RecyclableDemon extends Genie {
     }
 
     public void recycle() {
-        if (!recycled) {
-            recycled = true;
+        recycled = true;
 
-            System.out.println("Recycled");
-
-            return;
-        }
-
-        System.out.println("Already recycled");
+        System.out.println("Recycled");
     }
 
     public boolean isRecycled() {

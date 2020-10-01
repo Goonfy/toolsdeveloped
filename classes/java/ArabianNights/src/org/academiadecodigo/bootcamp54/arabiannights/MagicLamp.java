@@ -25,21 +25,26 @@ public class MagicLamp {
     }
 
     public void rechargeLamp(Genie genie) {
-        if(geniesNumber < maxGeniesNumber) {
+        if (genie instanceof RecyclableDemon) {
+            RecyclableDemon recyclableDemon = (RecyclableDemon)genie;
+
+            if (!recyclableDemon.isRecycled()) {
+                timesRecharged++;
+                geniesNumber = 0;
+
+                recyclableDemon.recycle();
+
+                System.out.println("Recharged Lamp");
+
+                return;
+            }
+
+            System.out.println("Already recharged");
+
             return;
         }
 
-        if (genie instanceof RecyclableDemon) {
-            RecyclableDemon recyclableDemon = (RecyclableDemon) genie;
-
-            if (recyclableDemon.isRecycled()) {
-                // It can only be recycled once
-                timesRecharged++;
-                geniesNumber = maxGeniesNumber;
-
-                recyclableDemon.recycle();
-            }
-        }
+        System.out.println("Not a recyclable demon");
     }
 
     public boolean compareToLamp(MagicLamp magicLamp) {

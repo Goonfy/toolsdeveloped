@@ -10,16 +10,17 @@ public class Main {
         Genie genie2 = magicLamp.rubTheLamp();
         genie2.grantWish();
 
-        magicLamp.rechargeLamp(genie1);
+        magicLamp.rechargeLamp(genie2);
 
         MagicLamp magicLamp1 = new MagicLamp(10);
         MagicLamp magicLamp2 = new MagicLamp(9);
 
         if (magicLamp1.compareToLamp(magicLamp2)) {
             System.out.println("Lamps are equal");
+            return;
         }
-        else {
+
             System.out.println("Diferent lamps");
-        }
     }
 }
+
