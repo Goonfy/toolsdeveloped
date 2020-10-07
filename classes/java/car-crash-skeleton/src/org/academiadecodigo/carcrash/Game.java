@@ -2,8 +2,6 @@ package org.academiadecodigo.carcrash;
 
 import org.academiadecodigo.carcrash.cars.Car;
 import org.academiadecodigo.carcrash.cars.CarFactory;
-import org.academiadecodigo.carcrash.cars.CarType;
-import org.academiadecodigo.carcrash.cars.Fiat;
 import org.academiadecodigo.carcrash.field.Field;
 
 public class Game {
@@ -14,7 +12,7 @@ public class Game {
     private Car[] cars;
 
     /** Animation delay */
-    private int delay;
+    private final int delay;
 
     public Game(int cols, int rows, int delay) {
 
@@ -61,6 +59,16 @@ public class Game {
 
     private void moveAllCars() {
         for (Car car : cars) {
+            for (Car car2 : cars) {
+                if (car == car2) {
+                    continue;
+                }
+
+                if ((car.getPos().getCol() == car2.getPos().getCol()) && (car.getPos().getRow() == car2.getPos().getRow())) {
+                    car.crash();
+                }
+            }
+
             car.moveCar();
         }
     }
