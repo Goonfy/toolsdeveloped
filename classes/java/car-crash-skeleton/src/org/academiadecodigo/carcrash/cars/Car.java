@@ -4,59 +4,67 @@ import org.academiadecodigo.carcrash.field.Field;
 import org.academiadecodigo.carcrash.field.Position;
 
 public abstract class Car {
+    private final Position pos;
 
-    /** The position of the car on the grid */
-    private Position pos;
-
-    private boolean reverseAcceleration;
-    private boolean reverseTurn;
     private boolean isCrashed;
 
-    private final int SPEED;
+    private boolean reverseForward;
+    private boolean reverseTurn;
+
+    protected int speed;
+
+    protected int randomPercentage;
+
+    protected String carBrand;
 
     public Car(int col, int row) {
         pos = new Position(col, row);
 
-        SPEED = 1;
+        reverseForward = false;
+        reverseTurn = false;
     }
 
     public void moveCar() {
-        if (getPos().getCol() >= Field.getWidth() - 1) {
-            getPos().setCol(Field.getWidth() - 1);
-            reverseAcceleration = true;
-        }
-        else if (getPos().getCol() <= 0) {
-            getPos().setCol(0);
-            reverseAcceleration = false;
+        if (isCrashed()) {
+            return;
         }
 
-        if (getPos().getRow() >= Field.getHeight() - 1) {
-            getPos().setRow(Field.getHeight() - 1);
-            reverseTurn = true;
-        }
-        else if (getPos().getRow() <= 0) {
-            getPos().setRow(0);
-            reverseTurn = false;
-        }
-
-        if ((int)(Math.random() * 20) == 0) {
+        if ((int)(Math.random() * randomPercentage) == 0) {
             turn();
             return;
         }
 
-        accelerate();
+        forward();
     }
 
-    private void accelerate() {
+    private void forward() {
         reverseTurn = (int)(Math.random() * 2) == 0;
-        int speed = reverseAcceleration ? getPos().getCol() - SPEED : getPos().getCol() + SPEED;
-        getPos().setCol(speed);
+
+        int col = reverseForward ? getPos().getCol() - speed : getPos().getCol() + speed;
+
+        if (getPos().getCol() > Field.getWidth() - 1) {
+            col = 0;
+        }
+        else if (getPos().getCol() < 0) {
+            col = Field.getWidth() - 1;
+        }
+
+        getPos().setCol(col);
     }
 
     private void turn() {
-        reverseAcceleration = (int)(Math.random() * 2) == 0;
-        int speed = reverseTurn ? getPos().getRow() - SPEED : getPos().getRow() + SPEED;
-        getPos().setRow(speed);
+        reverseForward = (int)(Math.random() * 2) == 0;
+
+        int row = reverseTurn ? getPos().getRow() - speed : getPos().getRow() + speed;
+
+        if (getPos().getRow() > Field.getHeight() - 1) {
+            row = 0;
+        }
+        else if (getPos().getRow() < 0) {
+            row = Field.getHeight() - 1;
+        }
+
+        getPos().setRow(row);
     }
 
     public Position getPos() {
@@ -67,7 +75,8 @@ public abstract class Car {
         return isCrashed;
     }
 
-    private void checkCollision() {
-
+    public void crash() {
+        isCrashed = true;
+        carBrand = "X";
     }
 }

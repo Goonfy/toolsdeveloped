@@ -1,8 +1,9 @@
 package org.academiadecodigo.carcrash.cars;
 
 public enum CarType {
-    FIAT("F"), // Each enum value is actually a constructor call
-    MUSTANG("M");
+    FIAT("F"),
+    MUSTANG("M"),
+    SUPRA("S");
 
     private String symbol;
 
