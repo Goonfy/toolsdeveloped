@@ -1,18 +1,14 @@
 package org.academiadecodigo.carcrash.cars;
 
+import org.academiadecodigo.carcrash.field.Position;
+
 public class Fiat extends Car {
-    public Fiat(int col, int row) {
-        super(col, row);
-
-        carBrand = CarType.FIAT.getSymbol();
-
-        speed = 1;
-
-        randomPercentage = 20;
+    public Fiat(Position position) {
+        super(position);
     }
 
     @Override
     public String toString() {
-        return carBrand;
+        return CarType.FIAT.getSymbol();
     }
 }

@@ -4,79 +4,84 @@ import org.academiadecodigo.carcrash.field.Field;
 import org.academiadecodigo.carcrash.field.Position;
 
 public abstract class Car {
-    private final Position pos;
+    private final Position position;
 
-    private boolean isCrashed;
+    private boolean crashed;
 
-    private boolean reverseForward;
-    private boolean reverseTurn;
+    private InputType inputType;
 
     protected int speed;
 
-    protected int randomPercentage;
+    public Car(Position position) {
+        this.position = position;
 
-    protected String carBrand;
+        speed = 1;
 
-    public Car(int col, int row) {
-        pos = new Position(col, row);
-
-        reverseForward = false;
-        reverseTurn = false;
+        inputType = InputType.values()[(int)(Math.random() * InputType.values().length)];
     }
 
     public void moveCar() {
-        if (isCrashed()) {
+        if (crashed) {
             return;
         }
 
-        if ((int)(Math.random() * randomPercentage) == 0) {
-            turn();
-            return;
+        if ((int) (Math.random() * 10) == 0) {
+            changeDirection(inputType);
         }
 
-        forward();
+        for (int i = 0; i < speed; i++) {
+            position.updatePosition(inputType);
+
+            checkScreenLimits();
+        }
     }
 
-    private void forward() {
-        reverseTurn = (int)(Math.random() * 2) == 0;
+    public void changeDirection(InputType lastInputType) {
+        InputType direction;
 
-        int col = reverseForward ? getPos().getCol() - speed : getPos().getCol() + speed;
-
-        if (getPos().getCol() > Field.getWidth() - 1) {
-            col = 0;
+        switch (lastInputType) {
+            case FORWARD:
+            case BACKWARDS:
+                direction = ((int) (Math.random() * 2) == 0) ? InputType.RIGHT : InputType.LEFT;
+                break;
+            case RIGHT:
+            case LEFT:
+                direction = ((int) (Math.random() * 2) == 0) ? InputType.FORWARD : InputType.BACKWARDS;
+                break;
+            default:
+                direction = null;
         }
-        else if (getPos().getCol() < 0) {
-            col = Field.getWidth() - 1;
-        }
 
-        getPos().setCol(col);
+        this.inputType = direction;
     }
 
-    private void turn() {
-        reverseForward = (int)(Math.random() * 2) == 0;
-
-        int row = reverseTurn ? getPos().getRow() - speed : getPos().getRow() + speed;
-
-        if (getPos().getRow() > Field.getHeight() - 1) {
-            row = 0;
-        }
-        else if (getPos().getRow() < 0) {
-            row = Field.getHeight() - 1;
+    private void checkScreenLimits() {
+        if (position.getCol() >= Field.getWidth() - 1) {
+            inputType = InputType.BACKWARDS;
         }
 
-        getPos().setRow(row);
+        if (position.getCol() <= 0) {
+            inputType = InputType.FORWARD;
+        }
+
+        if (position.getRow() >= Field.getHeight() - 1) {
+            inputType = InputType.LEFT;
+        }
+
+        if (position.getRow() <= 0) {
+            inputType = InputType.RIGHT;
+        }
     }
 
     public Position getPos() {
-        return pos;
+        return position;
     }
 
     public boolean isCrashed() {
-        return isCrashed;
+        return crashed;
     }
 
     public void crash() {
-        isCrashed = true;
-        carBrand = "X";
+        crashed = true;
     }
 }

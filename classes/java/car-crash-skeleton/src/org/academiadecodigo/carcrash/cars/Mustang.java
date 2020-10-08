@@ -1,18 +1,16 @@
 package org.academiadecodigo.carcrash.cars;
 
-public class Mustang extends Car {
-    public Mustang(int col, int row) {
-        super(col, row);
+import org.academiadecodigo.carcrash.field.Position;
 
-        carBrand = CarType.MUSTANG.getSymbol();
+public class Mustang extends Car {
+    public Mustang(Position position) {
+        super(position);
 
         speed = 5;
-
-        randomPercentage = 10;
     }
 
     @Override
     public String toString() {
-        return carBrand;
+        return CarType.MUSTANG.getSymbol();
     }
 }

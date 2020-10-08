@@ -1,18 +1,24 @@
 package org.academiadecodigo.carcrash.cars;
 
+import org.academiadecodigo.carcrash.field.Position;
+
 public class CarFactory {
     public static Car getNewCar(int col, int row) {
+        Position position = new Position(col, row);
+
+        CarType carType = CarType.values()[(int) (Math.random() * CarType.values().length)];
+
         Car car = null;
 
-        switch ((int)(Math.random() * 3)) {
-            case 0:
-                car = new Fiat(col, row);
+        switch (carType) {
+            case FIAT:
+                car = new Fiat(position);
                 break;
-            case 1:
-                car = new Mustang(col, row);
+            case MUSTANG:
+                car = new Mustang(position);
                 break;
-            case 2:
-                car = new Supra(col, row);
+            case SUPRA:
+                car = new Supra(position);
                 break;
         }
 

@@ -1,5 +1,7 @@
 package org.academiadecodigo.carcrash.field;
 
+import org.academiadecodigo.carcrash.cars.InputType;
+
 public class Position {
     private int col;
     private int row;
@@ -9,12 +11,13 @@ public class Position {
         this.row = row;
     }
 
-    public void setCol(int col) {
-        this.col = col;
-    }
+    public void updatePosition(InputType inputType) {
+        if (inputType == null) {
+            return;
+        }
 
-    public void setRow(int row) {
-        this.row = row;
+        col += inputType.getCol();
+        row += inputType.getRow();
     }
 
     public int getCol() {
