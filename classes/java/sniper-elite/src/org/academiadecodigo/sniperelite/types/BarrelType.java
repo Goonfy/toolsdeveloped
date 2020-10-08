@@ -1,4 +1,4 @@
-package org.academiadecodigo.sniperelite.objects;
+package org.academiadecodigo.sniperelite.types;
 
 public enum BarrelType {
     PLASTIC(1),

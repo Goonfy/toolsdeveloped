@@ -1,4 +1,4 @@
-package org.academiadecodigo.sniperelite.objects;
+package org.academiadecodigo.sniperelite.enemies;
 
 public class SoldierEnemy extends Enemy {
     public SoldierEnemy(int health) {

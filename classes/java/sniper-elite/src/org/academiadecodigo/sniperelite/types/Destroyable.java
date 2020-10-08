@@ -1,4 +1,4 @@
-package org.academiadecodigo.sniperelite.objects;
+package org.academiadecodigo.sniperelite.types;
 
 public interface Destroyable {
     void hit(int damageAmount);

@@ -1,11 +1,13 @@
 package org.academiadecodigo.sniperelite;
 
-import org.academiadecodigo.sniperelite.objects.*;
+import org.academiadecodigo.sniperelite.objects.GameObject;
+import org.academiadecodigo.sniperelite.objects.GameObjectFactory;
+import org.academiadecodigo.sniperelite.types.Destroyable;
 import org.academiadecodigo.sniperelite.weapons.SniperRifle;
 
 public class Game {
-    private GameObject[] gameObjects;
-    private SniperRifle sniperRifle;
+    private final GameObject[] gameObjects;
+    private final SniperRifle sniperRifle;
     private int shotsFired;
 
     public Game(int numberOfObjects) {
@@ -22,9 +24,9 @@ public class Game {
                 continue;
             }
 
-            Destroyable destroyable = (Destroyable) gameObject;
+            Destroyable destroyableObject = (Destroyable) gameObject;
 
-            while (!destroyable.isDestroyed()) {
+            while (!destroyableObject.isDestroyed()) {
                 sniperRifle.shoot((Destroyable) gameObject);
                 shotsFired++;
             }
@@ -37,29 +39,7 @@ public class Game {
         GameObject[] gameObjects = new GameObject[numberOfObjects];
 
         for (int i = 0; i < gameObjects.length; i++) {
-            int random = (int) (Math.random() * ObjectType.values().length);
-            ObjectType objectType = ObjectType.values()[random];
-
-            GameObject gameObject;
-
-            switch (objectType) {
-                case TREE:
-                    gameObject = new Tree();
-                    break;
-                case ARMOUREDENEMY:
-                    gameObject = new ArmouredEnemy(100, 100);
-                    break;
-                case SOLDIERENEMY:
-                    gameObject = new SoldierEnemy(100);
-                    break;
-                case BARREL:
-                    gameObject = new Barrel();
-                    break;
-                default:
-                    gameObject = null;
-            }
-
-            gameObjects[i] = gameObject;
+            gameObjects[i] = GameObjectFactory.generateGameObject();
         }
 
         return gameObjects;

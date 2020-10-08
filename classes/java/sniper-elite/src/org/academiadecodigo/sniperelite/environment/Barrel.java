@@ -1,13 +1,16 @@
-package org.academiadecodigo.sniperelite.objects;
+package org.academiadecodigo.sniperelite.environment;
+
+import org.academiadecodigo.sniperelite.objects.GameObject;
+import org.academiadecodigo.sniperelite.types.BarrelType;
+import org.academiadecodigo.sniperelite.types.Destroyable;
 
 public class Barrel extends GameObject implements Destroyable {
-    private BarrelType barrelType;
+    private final BarrelType barrelType;
     private int currentDamage;
     private boolean destroyed;
 
-    public Barrel() {
-        int random = (int) (Math.random() * BarrelType.values().length);
-        barrelType = BarrelType.values()[random];
+    public Barrel(BarrelType barrelType) {
+        this.barrelType = barrelType;
         currentDamage = 0;
     }
 
@@ -17,7 +20,6 @@ public class Barrel extends GameObject implements Destroyable {
 
         if (currentDamage >= barrelType.getMaxDamage()) {
             explode();
-            return;
         }
     }
 

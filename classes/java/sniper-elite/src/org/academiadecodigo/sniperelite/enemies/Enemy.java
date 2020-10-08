@@ -1,4 +1,7 @@
-package org.academiadecodigo.sniperelite.objects;
+package org.academiadecodigo.sniperelite.enemies;
+
+import org.academiadecodigo.sniperelite.objects.GameObject;
+import org.academiadecodigo.sniperelite.types.Destroyable;
 
 public class Enemy extends GameObject implements Destroyable {
     private int health;
@@ -13,7 +16,6 @@ public class Enemy extends GameObject implements Destroyable {
 
         if (health <= 0) {
             kill();
-            return;
         }
     }
 

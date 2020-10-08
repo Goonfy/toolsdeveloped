@@ -1,4 +1,6 @@
-package org.academiadecodigo.sniperelite.objects;
+package org.academiadecodigo.sniperelite.enemies;
+
+import org.academiadecodigo.sniperelite.enemies.Enemy;
 
 public class ArmouredEnemy extends Enemy {
     private int armour;
