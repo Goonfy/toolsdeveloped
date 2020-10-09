@@ -5,60 +5,28 @@ import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.mouse.Mouse;
+import org.academiadecodigo.simplegraphics.mouse.MouseEvent;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
+import org.academiadecodigo.simplegraphics.test.input.KeyboardInput;
+import org.academiadecodigo.simplegraphics.test.input.MouseInput;
 
 public class Game {
-    public void test() throws InterruptedException {
+    public Game() {
+        Mouse mouse = new Mouse(new MouseInput());
 
-        Keyboard k = new Keyboard();
-        KeyboardEvent event = new KeyboardEvent();
-        event.setKey(KeyboardEvent.KEY_SPACE);
-        event.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        k.addEventListener(event);
+        Keyboard keyboard = new Keyboard(new KeyboardInput());
+        KeyboardEvent keyboardEvent = new KeyboardEvent();
+        keyboardEvent.setKey(KeyboardEvent.KEY_SPACE);
+        keyboardEvent.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        keyboardEvent.setKeyboardEventType(KeyboardEventType.KEY_RELEASED);
+        keyboard.addEventListener(keyboardEvent);
+    }
 
-        Mouse m = new Mouse(this);
-
+    public void play() throws InterruptedException {
         Rectangle rect = new Rectangle(10, 10, 400, 400);
         rect.setColor(Color.BLACK);
         rect.draw();
 
-        Rectangle smallRect = new Rectangle(50, 50, 100, 100);
-        smallRect.setColor(Color.RED);
-        smallRect.fill();
-
-        Ellipse ellipse = new Ellipse(30, 30, 50, 60);
-        ellipse.setColor(Color.YELLOW);
-        ellipse.fill();
-
-        Line line = new Line(200, 200, 300, 250);
-        line.setColor(Color.BLUE);
-        line.draw();
-
-        Text text = new Text(20, 180, "Simple Graphics");
-        text.setColor(Color.MAGENTA);
-        text.draw();
-
-        Picture pic = new Picture(20, 220, "http://static0.bigstockphoto.com/thumbs/3/5/2/small2/25346960.jpg");
-        pic.draw();
-
         Thread.sleep(2000);
-
-        smallRect.translate(100, 0);
-        ellipse.translate(20, 20);
-        line.translate(20, -10);
-        text.translate(20, 20);
-        pic.translate(40, 0);
-
-        Thread.sleep(2000);
-
-        smallRect.grow(10, 10);
-        ellipse.grow(-20, -20);
-        line.grow(10, 10);
-        text.grow(5, 5);
-        pic.grow(-50, -50);
-
-        Thread.sleep(2000);
-
-        text.setText("Academia de Codigo");
     }
 }
