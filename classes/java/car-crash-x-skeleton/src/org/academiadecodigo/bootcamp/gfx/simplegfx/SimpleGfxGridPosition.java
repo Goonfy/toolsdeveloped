@@ -12,7 +12,6 @@ import org.academiadecodigo.simplegraphics.graphics.Rectangle;
  * Simple graphics position
  */
 public class SimpleGfxGridPosition extends AbstractGridPosition {
-
     private Rectangle rectangle;
     private SimpleGfxGrid simpleGfxGrid;
 
@@ -25,7 +24,7 @@ public class SimpleGfxGridPosition extends AbstractGridPosition {
 
         simpleGfxGrid = grid;
 
-        rectangle = new Rectangle(this.getCol() * grid.getCellSize() + grid.PADDING,  this.getRow() * grid.getCellSize() + grid.PADDING, grid.getCellSize(), grid.getCellSize());
+        rectangle = new Rectangle(simpleGfxGrid.columnToX(getCol()), simpleGfxGrid.rowToY(getRow()), grid.getCellSize(), grid.getCellSize());
         rectangle.draw();
     }
 
@@ -40,7 +39,7 @@ public class SimpleGfxGridPosition extends AbstractGridPosition {
 
         simpleGfxGrid = grid;
 
-        rectangle = new Rectangle(col * grid.getCellSize() + grid.PADDING,  row * grid.getCellSize() + grid.PADDING, grid.getCellSize(), grid.getCellSize());
+        rectangle = new Rectangle(simpleGfxGrid.columnToX(col), simpleGfxGrid.rowToY(row), grid.getCellSize(), grid.getCellSize());
         rectangle.draw();
     }
 
@@ -65,7 +64,17 @@ public class SimpleGfxGridPosition extends AbstractGridPosition {
      */
     @Override
     public void moveInDirection(GridDirection direction, int distance) {
-        super.moveInDirection(direction, distance);
+        if (distance * simpleGfxGrid.getCellSize() > simpleGfxGrid.getCols()
+                || distance * simpleGfxGrid.getCellSize() > simpleGfxGrid.getRows()) {
+            return;
+        }
+
+        int lastColPos = getCol();
+        int lastRowPos = getRow();
+
+        super.moveInDirection(direction, distance * simpleGfxGrid.getCellSize());
+
+        rectangle.translate(getCol() - lastColPos, getRow() - lastRowPos);
     }
 
     /**
@@ -77,7 +86,7 @@ public class SimpleGfxGridPosition extends AbstractGridPosition {
 
         Color color1;
 
-        switch (color.name()) {
+        switch (color.toString()) {
             case "RED":
                 color1 = Color.RED;
                 break;
