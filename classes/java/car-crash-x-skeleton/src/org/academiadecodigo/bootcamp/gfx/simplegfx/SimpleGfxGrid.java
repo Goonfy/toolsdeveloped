@@ -18,6 +18,8 @@ public class SimpleGfxGrid implements Grid {
     public SimpleGfxGrid(int cols, int rows){
         this.cols = cols;
         this.rows = rows;
+
+        rectangle = new Rectangle(PADDING, PADDING, cols * cellSize, rows * cellSize);
     }
 
     /**
@@ -25,7 +27,6 @@ public class SimpleGfxGrid implements Grid {
      */
     @Override
     public void init() {
-        rectangle = new Rectangle(getX(), getY(), cols * cellSize, rows * cellSize);
         rectangle.draw();
     }
 
@@ -66,7 +67,7 @@ public class SimpleGfxGrid implements Grid {
      * @return the x position of the grid
      */
     public int getX() {
-        return PADDING;
+        return rectangle.getX();
     }
 
     /**
@@ -74,7 +75,7 @@ public class SimpleGfxGrid implements Grid {
      * @return the y position of the grid
      */
     public int getY() {
-        return PADDING;
+        return rectangle.getY();
     }
 
     /**
