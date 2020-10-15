@@ -1,9 +1,13 @@
 package org.academiadecodigo.bootcamp.containers;
 
-public class LinkedList<T> {
+import java.util.Iterator;
+
+public class LinkedList<T> implements Iterable<T> {
 
     private final Node<T> head;
     private int length = 0;
+
+    private LinkedList<T> linkedList;
 
     public LinkedList() {
         this.head = new Node<>(null);
@@ -34,7 +38,7 @@ public class LinkedList<T> {
      * @param index the index of the element
      * @return the element
      */
-    public Object get(int index) {
+    public T get(int index) {
         if (index >= length) {
             return null;
         }
@@ -104,7 +108,24 @@ public class LinkedList<T> {
         return false;
     }
 
-    private static class Node<Y> {
+    public Node<T> getHead() {
+        return head;
+    }
+
+    public LinkedList<T> getLinkedList() {
+        return linkedList;
+    }
+
+    public void addToList(T data) {
+        linkedList.add(data);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListIterator<>(this);
+    }
+
+    public static class Node<Y> {
 
         private Y data;
         private Node<Y> next;
@@ -114,7 +135,7 @@ public class LinkedList<T> {
             next = null;
         }
 
-        public Object getData() {
+        public Y getData() {
             return data;
         }
 
