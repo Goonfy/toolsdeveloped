@@ -1,7 +1,6 @@
 package org.academiadecodigo.bootcamp54;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class RangeIterator implements Iterator<Integer> {
@@ -23,9 +22,9 @@ public class RangeIterator implements Iterator<Integer> {
 
     @Override
     public Integer next() {
-        /*if (current >= range.getMax()) {
+        if (!hasNext()) {
             throw new NoSuchElementException();
-        }*/
+        }
 
         for (int l : range.getLinkedList()) {
             if (l == current) {
@@ -39,5 +38,9 @@ public class RangeIterator implements Iterator<Integer> {
     @Override
     public void remove() {
         range.linkedListAdd(current);
+    }
+
+    public Integer getCurrent() {
+        return current;
     }
 }

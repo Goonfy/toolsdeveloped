@@ -7,8 +7,6 @@ public class LinkedList<T> implements Iterable<T> {
     private final Node<T> head;
     private int length = 0;
 
-    private LinkedList<T> linkedList;
-
     public LinkedList() {
         this.head = new Node<>(null);
     }
@@ -112,16 +110,8 @@ public class LinkedList<T> implements Iterable<T> {
         return head;
     }
 
-    public LinkedList<T> getLinkedList() {
-        return linkedList;
-    }
-
-    public void addToList(T data) {
-        linkedList.add(data);
-    }
-
     @Override
-    public Iterator<T> iterator() {
+    public LinkedListIterator<T> iterator() {
         return new LinkedListIterator<>(this);
     }
 

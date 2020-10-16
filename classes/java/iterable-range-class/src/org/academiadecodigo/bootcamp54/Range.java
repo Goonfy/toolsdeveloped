@@ -18,7 +18,7 @@ public class Range implements Iterable<Integer> {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public RangeIterator iterator() {
         return new RangeIterator(this);
     }
 

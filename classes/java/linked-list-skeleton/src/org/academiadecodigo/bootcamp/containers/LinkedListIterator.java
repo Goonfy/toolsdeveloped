@@ -3,6 +3,7 @@ package org.academiadecodigo.bootcamp.containers;
 import org.academiadecodigo.bootcamp.containers.LinkedList.Node;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedListIterator<T> implements Iterator<T> {
     private final LinkedList<T> linkedList;
@@ -22,8 +23,8 @@ public class LinkedListIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
-        if (node.getNext() == null) {
-            return node.getData();
+        if (!hasNext()) {
+            throw new NoSuchElementException();
         }
 
         node = node.getNext();
@@ -32,7 +33,10 @@ public class LinkedListIterator<T> implements Iterator<T> {
 
     @Override
     public void remove() {
-        node = node.getNext();
         linkedList.remove(node.getData());
+    }
+
+    public T getData() {
+        return node.getData();
     }
 }
