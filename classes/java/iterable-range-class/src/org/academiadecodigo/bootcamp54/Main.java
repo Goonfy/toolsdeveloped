@@ -4,11 +4,11 @@ import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
-        Range range = new Range(1, 9);
+        Range range = new Range(1, 9, true);
 
-        RangeIterator iterator = range.iterator();
-        while (iterator.hasNext()){
-            if (iterator.getCurrent() == 6) {
+        Iterator<Integer> iterator = range.iterator();
+        while (iterator.hasNext()) {
+            if (range.getCurrent() == 6) {
                 iterator.remove();
             }
 

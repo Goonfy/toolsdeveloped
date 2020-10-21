@@ -4,8 +4,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class RangeIterator implements Iterator<Integer> {
+    @Override
+    public boolean hasNext() {
+        return false;
+    }
 
-    private final Range range;
+    @Override
+    public Integer next() {
+        return null;
+    }
+
+    /*private final Range range;
 
     private Integer current;
 
@@ -42,5 +51,5 @@ public class RangeIterator implements Iterator<Integer> {
 
     public Integer getCurrent() {
         return current;
-    }
+    }*/
 }
