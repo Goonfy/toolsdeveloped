@@ -7,7 +7,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 public class InputHandler implements KeyboardHandler {
 
-    private Brush brush;
+    private final Brush brush;
 
     public InputHandler(Brush brush) {
         this.brush = brush;
@@ -16,16 +16,16 @@ public class InputHandler implements KeyboardHandler {
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
         if (keyboardEvent.getKey() == KeyboardEvent.KEY_UP) {
-            brush.move(KeysType.UP);
+            brush.move(KeyType.UP);
         }
         if (keyboardEvent.getKey() == KeyboardEvent.KEY_DOWN) {
-            brush.move(KeysType.DOWN);
+            brush.move(KeyType.DOWN);
         }
         if (keyboardEvent.getKey() == KeyboardEvent.KEY_LEFT) {
-            brush.move(KeysType.LEFT);
+            brush.move(KeyType.LEFT);
         }
         if (keyboardEvent.getKey() == KeyboardEvent.KEY_RIGHT) {
-            brush.move(KeysType.RIGHT);
+            brush.move(KeyType.RIGHT);
         }
         if (keyboardEvent.getKey() == KeyboardEvent.KEY_SPACE) {
             if (brush.isDrawing()) {

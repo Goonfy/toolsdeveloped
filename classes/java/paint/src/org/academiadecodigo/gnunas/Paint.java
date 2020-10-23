@@ -1,8 +1,7 @@
 package org.academiadecodigo.gnunas;
 
 import org.academiadecodigo.gnunas.cell.Cell;
-import org.academiadecodigo.gnunas.file.Load;
-import org.academiadecodigo.gnunas.file.Save;
+import org.academiadecodigo.gnunas.file.FileManager;
 import org.academiadecodigo.gnunas.input.Keyboard;
 import org.academiadecodigo.gnunas.tools.Brush;
 import org.academiadecodigo.simplegraphics.graphics.Color;
@@ -12,47 +11,50 @@ import java.util.LinkedList;
 
 public class Paint {
 
-    private static Rectangle screen;
-
-    private final Brush brush;
-
     public static final int PADDING = 10;
 
-    public static final int CELLSIZE = 30;
+    private static Rectangle screen;
 
-    public static final int NUMBEROFCOLS = 8;
-    public static final int NUMBEROFROWS = 8;
+    private static int NUMBER_OF_COLS;
+    private static int NUMBER_OF_ROWS;
+    private static int CELL_SIZE;
 
     private static final LinkedList<Cell> gridPositions = new LinkedList<>();
 
-    public Paint() {
-        drawScreen();
-
-        brush = new Brush(gridPositions);
-
-        new Keyboard(brush);
+    public Paint(int numberOfCols, int numberOfRows, int cellSize) {
+        NUMBER_OF_COLS = numberOfCols;
+        NUMBER_OF_ROWS = numberOfRows;
+        CELL_SIZE = cellSize;
     }
 
-    private void drawScreen() {
-        screen = new Rectangle(PADDING, PADDING, CELLSIZE * NUMBEROFCOLS, CELLSIZE * NUMBEROFROWS);
+    public void init() {
+        screen = new Rectangle(PADDING, PADDING, CELL_SIZE * NUMBER_OF_COLS, CELL_SIZE * NUMBER_OF_COLS);
         screen.draw();
 
         int posX = 0;
         int posY = 0;
 
-        for (int c = 0; c < NUMBEROFCOLS; c++) {
-            for (int r = 0; r < NUMBEROFROWS; r++) {
-                Cell gridRectangle = new Cell(posX + PADDING, posY + PADDING, CELLSIZE, CELLSIZE, false);
+        int cellID = 0;
+
+        for (int colNumber = 0; colNumber <= NUMBER_OF_COLS; colNumber++) {
+            for (int rowNumber = 0; rowNumber <= NUMBER_OF_ROWS; rowNumber++) {
+                Cell gridRectangle = new Cell(posX + PADDING, posY + PADDING, CELL_SIZE, CELL_SIZE, cellID, false);
                 gridRectangle.draw();
 
                 gridPositions.add(gridRectangle);
 
-                posY += CELLSIZE;
+                posY += CELL_SIZE;
+
+                cellID++;
             }
 
             posY = 0;
-            posX += CELLSIZE;
+            posX += CELL_SIZE;
         }
+
+        Brush brush = new Brush(gridPositions);
+
+        new Keyboard(brush);
     }
 
     public static void clean() {
@@ -67,13 +69,13 @@ public class Paint {
         for (int i = 0; i < gridPositions.size(); i++) {
             Cell gridCell = gridPositions.get(i);
 
-            LinkedList<Boolean> savedTiles = Load.load();
+            LinkedList<Integer> savedTiles = FileManager.load();
 
             if (savedTiles == null) {
                 return;
             }
 
-            if (savedTiles.get(i)) {
+            if (savedTiles.contains(i)) {
                 gridCell.fill();
                 gridCell.setColor(Color.DARK_GRAY);
                 gridCell.setFilled(true);
@@ -82,7 +84,23 @@ public class Paint {
     }
 
     public static void saveDraw() {
-        Save.save(gridPositions);
+        FileManager.save(gridPositions);
+    }
+
+    public static int getPadding() {
+        return PADDING;
+    }
+
+    public static int getNumberOfCols() {
+        return NUMBER_OF_COLS;
+    }
+
+    public static int getNumberOfRows() {
+        return NUMBER_OF_ROWS;
+    }
+
+    public static int getCellSize() {
+        return CELL_SIZE;
     }
 
     public static int getWidth() {

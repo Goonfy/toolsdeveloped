@@ -2,7 +2,7 @@ package org.academiadecodigo.gnunas.tools;
 
 import org.academiadecodigo.gnunas.Paint;
 import org.academiadecodigo.gnunas.cell.Cell;
-import org.academiadecodigo.gnunas.input.KeysType;
+import org.academiadecodigo.gnunas.input.KeyType;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
@@ -18,7 +18,7 @@ public class Brush {
     public Brush(LinkedList<Cell> gridPositions) {
         this.gridPositions = gridPositions;
 
-        brushCursor = new Rectangle(Paint.PADDING, Paint.PADDING, Paint.CELLSIZE, Paint.CELLSIZE);
+        brushCursor = new Rectangle(Paint.PADDING, Paint.PADDING, Paint.getCellSize(), Paint.getCellSize());
         brushCursor.fill();
         brushCursor.setColor(Color.GREEN);
     }
@@ -46,36 +46,36 @@ public class Brush {
         }
     }
 
-    public void move(KeysType keysType) {
+    public void move(KeyType keyType) {
 
-        if (getX() + getWidth() >= Paint.getWidth() && keysType == KeysType.RIGHT) {
+        if (getX() + getWidth() >= Paint.getWidth() && keyType == KeyType.RIGHT) {
             return;
         }
-        if (getX() <= Paint.PADDING && keysType == KeysType.LEFT) {
+        if (getX() <= Paint.PADDING && keyType == KeyType.LEFT) {
             return;
         }
-        if (getY() + getHeight() >= Paint.getHeight() && keysType == KeysType.DOWN) {
+        if (getY() + getHeight() >= Paint.getHeight() && keyType == KeyType.DOWN) {
             return;
         }
-        if (getY() <= Paint.PADDING && keysType == KeysType.UP) {
+        if (getY() <= Paint.PADDING && keyType == KeyType.UP) {
             return;
         }
 
         int x = 0;
         int y = 0;
 
-        switch (keysType) {
+        switch (keyType) {
             case UP:
-                y = -Paint.CELLSIZE;
+                y = -Paint.getCellSize();
                 break;
             case DOWN:
-                y = Paint.CELLSIZE;
+                y = Paint.getCellSize();
                 break;
             case LEFT:
-                x = -Paint.CELLSIZE;
+                x = -Paint.getCellSize();
                 break;
             case RIGHT:
-                x = Paint.CELLSIZE;
+                x = Paint.getCellSize();
                 break;
             default:
                 break;
