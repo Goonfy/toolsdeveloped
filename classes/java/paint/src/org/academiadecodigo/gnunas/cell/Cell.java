@@ -16,29 +16,25 @@ public class Cell extends Rectangle {
         super(v, v1, v2, v3);
 
         this.filled = filled;
-
         this.cellID = cellID;
+
+        setColor(Color.BLACK);
     }
 
-    @Override
     public void draw() {
         super.draw();
 
-        filled = false;
-    }
-
-    @Override
-    public void delete() {
-        super.delete();
+        color = new Color(Color.BLACK.getRed(), Color.BLACK.getGreen(), Color.BLACK.getBlue());
+        setColor(color);
 
         filled = false;
     }
-
-    @Override
+    
     public void fill() {
         super.fill();
 
-        setColor(new Color(new Random().nextInt(255),new Random().nextInt(255),new Random().nextInt(255)));
+        color = new Color(new Random().nextInt(255),new Random().nextInt(255),new Random().nextInt(255));
+        setColor(color);
 
         filled = true;
     }
@@ -47,12 +43,16 @@ public class Cell extends Rectangle {
         return cellID;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public boolean isFilled() {
         return filled;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(cellID);
+        return "id: " + cellID + " color: " + color.getRed() + " " + color.getGreen() + " " + color.getBlue();
     }
 }

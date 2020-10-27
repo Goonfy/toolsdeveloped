@@ -45,7 +45,6 @@ public class Brush {
     }
 
     public void move(KeyType keyType) {
-
         if (getX() + getWidth() >= Paint.getWidth() && keyType == KeyType.RIGHT) {
             return;
         }
