@@ -24,7 +24,7 @@ public class Main {
 
             System.out.println("HostName: " + url);
             System.out.println("IP: " + address.getHostAddress());
-            System.out.println("Host " + url + " reachable: " + address.isReachable(1000));
+            System.out.println("Host " + url + " reachable: " + address.isReachable(100));
         } catch (IOException e) {
             e.printStackTrace();
         }
