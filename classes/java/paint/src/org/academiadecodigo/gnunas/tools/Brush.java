@@ -7,6 +7,7 @@ import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Brush {
     private final Rectangle brushCursor;
@@ -20,7 +21,7 @@ public class Brush {
 
         brushCursor = new Rectangle(Paint.PADDING, Paint.PADDING, Paint.getCellSize(), Paint.getCellSize());
         brushCursor.fill();
-        brushCursor.setColor(Color.GREEN);
+        brushCursor.setColor(Color.BLACK);
     }
 
     public void draw() {
@@ -33,14 +34,11 @@ public class Brush {
 
             if (gridCell.isFilled()) {
                 gridCell.draw();
-                gridCell.setFilled(false);
 
                 return;
             }
 
             gridCell.fill();
-            gridCell.setColor(Color.DARK_GRAY);
-            gridCell.setFilled(true);
 
             return;
         }

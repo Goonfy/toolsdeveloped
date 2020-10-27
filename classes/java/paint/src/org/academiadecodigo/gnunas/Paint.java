@@ -1,6 +1,7 @@
 package org.academiadecodigo.gnunas;
 
 import org.academiadecodigo.gnunas.cell.Cell;
+import org.academiadecodigo.gnunas.cell.CellFactory;
 import org.academiadecodigo.gnunas.file.FileManager;
 import org.academiadecodigo.gnunas.input.Keyboard;
 import org.academiadecodigo.gnunas.tools.Brush;
@@ -31,37 +32,36 @@ public class Paint {
         screen = new Rectangle(PADDING, PADDING, CELL_SIZE * NUMBER_OF_COLS, CELL_SIZE * NUMBER_OF_COLS);
         screen.draw();
 
-        int posX = 0;
-        int posY = 0;
-
-        int cellID = 0;
-
-        for (int colNumber = 0; colNumber <= NUMBER_OF_COLS; colNumber++) {
-            for (int rowNumber = 0; rowNumber <= NUMBER_OF_ROWS; rowNumber++) {
-                Cell gridRectangle = new Cell(posX + PADDING, posY + PADDING, CELL_SIZE, CELL_SIZE, cellID, false);
-                gridRectangle.draw();
-
-                gridPositions.add(gridRectangle);
-
-                posY += CELL_SIZE;
-
-                cellID++;
-            }
-
-            posY = 0;
-            posX += CELL_SIZE;
-        }
+        makeGrid();
 
         Brush brush = new Brush(gridPositions);
 
         new Keyboard(brush);
     }
 
+    public void makeGrid() {
+        int posX = 0;
+        int posY = 0;
+
+        for (int colNumber = 0; colNumber <= NUMBER_OF_COLS; colNumber++) {
+            for (int rowNumber = 0; rowNumber <= NUMBER_OF_ROWS; rowNumber++) {
+                Cell cell = CellFactory.makeCell(posX, posY);
+                cell.draw();
+
+                gridPositions.add(cell);
+
+                posY += CELL_SIZE;
+            }
+
+            posY = 0;
+            posX += CELL_SIZE;
+        }
+    }
+
     public static void clean() {
         for (int i = 0; i < gridPositions.size(); i++) {
             Cell gridCell = gridPositions.get(i);
             gridCell.draw();
-            gridCell.setFilled(false);
         }
     }
 
@@ -77,18 +77,12 @@ public class Paint {
 
             if (savedTiles.contains(i)) {
                 gridCell.fill();
-                gridCell.setColor(Color.DARK_GRAY);
-                gridCell.setFilled(true);
             }
         }
     }
 
     public static void saveDraw() {
         FileManager.save(gridPositions);
-    }
-
-    public static int getPadding() {
-        return PADDING;
     }
 
     public static int getNumberOfCols() {
