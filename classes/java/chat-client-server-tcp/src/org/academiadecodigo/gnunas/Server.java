@@ -26,16 +26,21 @@ public class Server {
         serverSocket = new ServerSocket(PORT_NUMBER);
         clientSocket = serverSocket.accept();
 
-        sendPacket(receivePacket().readLine());
+        while (clientSocket.isBound()) {
+            sendPacket(receivePacket());
+        }
 
         Objects.requireNonNull(serverSocket).close();
     }
 
-    private static BufferedReader receivePacket() throws IOException {
-        return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    private static byte[] receivePacket() throws IOException {
+        byte[] receiveBuffer = new byte[1024];
+        clientSocket.getInputStream().read(receiveBuffer);
+
+        return receiveBuffer;
     }
 
-    private static void sendPacket(String message) throws IOException {
-        clientSocket.getOutputStream().write(message.getBytes());
+    private static void sendPacket(byte[] message) throws IOException {
+        clientSocket.getOutputStream().write(message);
     }
 }

@@ -37,7 +37,7 @@ public class Client {
     private static byte[] input() throws IOException {
         byte[] sendBuffer = new byte[1024];
 
-        int i = System.in.read(sendBuffer);
+        System.in.read(sendBuffer);
 
         return sendBuffer;
     }
