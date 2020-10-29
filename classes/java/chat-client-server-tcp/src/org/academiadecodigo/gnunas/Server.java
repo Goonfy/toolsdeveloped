@@ -12,8 +12,6 @@ public class Server {
 
     private static Socket clientSocket;
 
-    private static ServerSocket serverSocket;
-
     public static void main(String[] args) {
         try {
             server();
@@ -23,10 +21,14 @@ public class Server {
     }
 
     private static void server() throws IOException {
-        serverSocket = new ServerSocket(PORT_NUMBER);
+        ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
         clientSocket = serverSocket.accept();
 
         while (clientSocket.isBound()) {
+            if (clientSocket.isClosed()) {
+                break;
+            }
+
             sendPacket(receivePacket());
         }
 
