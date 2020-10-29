@@ -15,23 +15,36 @@ public class Client {
 
     public static void main(String[] args) {
         try {
+            clientSocket = new Socket(HOST_NAME, PORT_NUMBER);
             client();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
+
+    private static void close() {
+        try {
+            Objects.requireNonNull(clientSocket).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static void client() throws IOException {
-        clientSocket = new Socket(HOST_NAME, PORT_NUMBER);
-
-        while (clientSocket.isBound()) {
-            sendPacket(input());
+        while (true) {
+            byte[] inputMessage = input();
+            sendPacket(inputMessage);
 
             BufferedReader receivedData = receivePacket();
-            System.out.println(receivedData.readLine());
-        }
+            String receivedMessage = receivedData.readLine();
+            System.out.println(receivedMessage);
 
-        Objects.requireNonNull(clientSocket).close();
+            if (receivedMessage.contains("/quit")) {
+                return;
+            }
+        }
     }
 
     private static byte[] input() throws IOException {
@@ -47,6 +60,7 @@ public class Client {
     }
 
     private static void sendPacket(byte[] input) throws IOException {
-        clientSocket.getOutputStream().write(input);
+        PrintWriter fileWriter = new PrintWriter(clientSocket.getOutputStream(), true);
+        fileWriter.println(new String(input));
     }
 }
