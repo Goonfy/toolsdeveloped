@@ -5,12 +5,12 @@ import java.net.*;
 import java.util.Objects;
 
 public class Server {
-    private static final int PORT_NUMBER = 55000;
+    private final int PORT_NUMBER = 55000;
 
-    private static ServerSocket serverSocket;
-    private static Socket clientSocket;
+    private ServerSocket serverSocket;
+    private Socket clientSocket;
 
-    public static void main(String[] args) {
+    public void init() {
         try {
             serverSocket = new ServerSocket(PORT_NUMBER);
             server();
@@ -21,7 +21,7 @@ public class Server {
         }
     }
 
-    private static void close() {
+    private void close() {
         try {
             Objects.requireNonNull(serverSocket).close();
         } catch (IOException e) {
@@ -29,7 +29,7 @@ public class Server {
         }
     }
 
-    private static void server() throws IOException {
+    private void server() throws IOException {
         clientSocket = serverSocket.accept();
 
         while (true) {
@@ -45,11 +45,11 @@ public class Server {
         server();
     }
 
-    private static BufferedReader receivePacket() throws IOException {
+    private BufferedReader receivePacket() throws IOException {
         return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    private static void sendPacket(String message) throws IOException {
+    private void sendPacket(String message) throws IOException {
         PrintWriter fileWriter = new PrintWriter(clientSocket.getOutputStream(), true);
         fileWriter.println(message);
     }

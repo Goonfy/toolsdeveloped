@@ -8,12 +8,12 @@ import java.net.*;
 import java.util.Objects;
 
 public class Client {
-    private static final String HOST_NAME = "localhost";
-    private static final int PORT_NUMBER = 55000;
+    private final String HOST_NAME = "localhost";
+    private final int PORT_NUMBER = 55000;
 
-    private static Socket clientSocket;
+    private Socket clientSocket;
 
-    public static void main(String[] args) {
+    public void init() {
         try {
             clientSocket = new Socket(HOST_NAME, PORT_NUMBER);
             client();
@@ -24,7 +24,7 @@ public class Client {
         }
     }
 
-    private static void close() {
+    private void close() {
         try {
             Objects.requireNonNull(clientSocket).close();
         } catch (IOException e) {
@@ -32,7 +32,7 @@ public class Client {
         }
     }
 
-    private static void client() throws IOException {
+    private void client() throws IOException {
         while (true) {
             byte[] inputMessage = input();
             sendPacket(inputMessage);
@@ -47,7 +47,7 @@ public class Client {
         }
     }
 
-    private static byte[] input() throws IOException {
+    private byte[] input() throws IOException {
         byte[] sendBuffer = new byte[1024];
 
         System.in.read(sendBuffer);
@@ -55,11 +55,11 @@ public class Client {
         return sendBuffer;
     }
 
-    private static BufferedReader receivePacket() throws IOException {
+    private BufferedReader receivePacket() throws IOException {
         return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    private static void sendPacket(byte[] input) throws IOException {
+    private void sendPacket(byte[] input) throws IOException {
         PrintWriter fileWriter = new PrintWriter(clientSocket.getOutputStream(), true);
         fileWriter.println(new String(input));
     }

@@ -33,37 +33,47 @@ public class Server {
     }
 
     private void server() throws IOException {
-        clientSocket = serverSocket.accept();
+        while (true) {
+            clientSocket = serverSocket.accept();
 
-        String[] line = receivePacket().readLine().split(" ");
-        String httpVerb = line[0];
-        String path = line[1];
+            String[] line = receivePacket().readLine().split(" ");
+            String httpVerb = line[0];
+            String path = line[1];
 
-        if (httpVerb.equals("GET")) {
-            if (path.equals("/")) {
-                path = "/index.html";
+            if (httpVerb.equals("GET")) {
+                if (path.equals("/")) {
+                    path = "/index.html";
+                }
+
+                File file = new File("www" + path);
+
+                if (!file.exists()) {
+                    file = new File("www/404.html");
+                }
+
+                byte[] header = checkHeader(path, file);
+
+                if (header != null) {
+                    sendPacket(header, file);
+                }
             }
-
-            File file = new File("www" + path);
-
-            byte[] header = null;
-            if (!file.exists() || !path.contains(".")) {
-                file = new File("www/404.html");
-                header = HeaderType.NOTFOUND.setHeader(file);
-            }
-            else if (path.contains(".png") || path.contains(".jpg") || path.contains(".gif")) {
-                header = HeaderType.IMAGE.setHeader(file);
-            }
-            else if (path.contains(".html")) {
-                header = HeaderType.HTML.setHeader(file);
-            }
-
-            if (header != null) {
-                sendPacket(header, file);
-            }
-
-            server();
         }
+    }
+
+    private byte[] checkHeader(String path, File file) {
+        byte[] header = null;
+
+        if (!file.exists() || !path.contains(".")) {
+            header = HeaderType.NOTFOUND.setHeader(file);
+        }
+        else if (path.contains(".png") || path.contains(".jpg") || path.contains(".gif")) {
+            header = HeaderType.IMAGE.setHeader(file);
+        }
+        else if (path.contains(".html")) {
+            header = HeaderType.HTML.setHeader(file);
+        }
+
+        return header;
     }
 
     private BufferedReader receivePacket() throws IOException {
