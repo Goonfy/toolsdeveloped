@@ -47,30 +47,26 @@ public class Server {
 
                 File file = new File("www" + path);
 
-                if (!file.exists()) {
+                if (!file.exists() || !file.isFile()) {
                     file = new File("www/404.html");
                 }
 
-                byte[] header = checkHeader(path, file);
-
-                if (header != null) {
-                    sendPacket(header, file);
-                }
+                sendPacket(checkHeader(file), file);
             }
         }
     }
 
-    private byte[] checkHeader(String path, File file) {
-        byte[] header = null;
+    private byte[] checkHeader(File file) {
+        byte[] header = HeaderType.NOTFOUND.setHeader(file);
 
-        if (!file.exists() || !path.contains(".")) {
-            header = HeaderType.NOTFOUND.setHeader(file);
-        }
-        else if (path.contains(".png") || path.contains(".jpg") || path.contains(".gif")) {
+        if (file.getName().contains(".png") || file.getName().contains(".jpg") || file.getName().contains(".gif")) {
             header = HeaderType.IMAGE.setHeader(file);
         }
-        else if (path.contains(".html")) {
+        else if (file.getName().contains(".htm")) {
             header = HeaderType.HTML.setHeader(file);
+        }
+        else if (file.getName().contains(".css")) {
+            header = HeaderType.CSS.setHeader(file);
         }
 
         return header;

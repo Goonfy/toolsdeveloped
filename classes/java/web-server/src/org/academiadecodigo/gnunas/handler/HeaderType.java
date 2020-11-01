@@ -5,6 +5,7 @@ import java.io.File;
 public enum HeaderType {
     HTML("200 Document Follows", "text/html"),
     IMAGE("200 Document Follows", "image/gif"),
+    CSS("200 Document Follows", "text/css"),
     NOTFOUND("404 Not Found", "text/html");
 
     private final String code;
