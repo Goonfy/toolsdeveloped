@@ -3,56 +3,41 @@ package org.academiadecodigo.gnunas;
 import org.academiadecodigo.gnunas.handler.HeaderType;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Objects;
 
-public class Server {
-    private final int PORT_NUMBER = 8888;
+public class Server implements Runnable {
+    private final Socket clientSocket;
 
-    private ServerSocket serverSocket;
-    private Socket clientSocket;
-
-    public void init() {
-        try {
-            serverSocket = new ServerSocket(PORT_NUMBER);
-            server();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
+    public Server(Socket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 
-    private void close() {
+    @Override
+    public void run() {
         try {
-            Objects.requireNonNull(serverSocket).close();
+            handle();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void server() throws IOException {
-        while (true) {
-            clientSocket = serverSocket.accept();
+    private void handle() throws IOException {
+        String[] line = receivePacket().readLine().split(" ");
+        String httpVerb = line[0];
+        String path = line[1];
 
-            String[] line = receivePacket().readLine().split(" ");
-            String httpVerb = line[0];
-            String path = line[1];
-
-            if (httpVerb.equals("GET")) {
-                if (path.equals("/")) {
-                    path = "/index.html";
-                }
-
-                File file = new File("www" + path);
-
-                if (!file.exists() || !file.isFile()) {
-                    file = new File("www/404.html");
-                }
-
-                sendPacket(checkHeader(file), file);
+        if (httpVerb.equals("GET")) {
+            if (path.equals("/")) {
+                path = "/index.html";
             }
+
+            File file = new File("www" + path);
+
+            if (!file.exists() || !file.isFile()) {
+                file = new File("www/404.html");
+            }
+
+            sendPacket(checkHeader(file), file);
         }
     }
 
@@ -61,11 +46,9 @@ public class Server {
 
         if (file.getName().contains(".png") || file.getName().contains(".jpg") || file.getName().contains(".gif")) {
             header = HeaderType.IMAGE.setHeader(file);
-        }
-        else if (file.getName().contains(".htm")) {
+        } else if (file.getName().contains(".htm")) {
             header = HeaderType.HTML.setHeader(file);
-        }
-        else if (file.getName().contains(".css")) {
+        } else if (file.getName().contains(".css")) {
             header = HeaderType.CSS.setHeader(file);
         }
 
