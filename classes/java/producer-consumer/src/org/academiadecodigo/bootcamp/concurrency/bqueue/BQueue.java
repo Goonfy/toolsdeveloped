@@ -1,9 +1,6 @@
 package org.academiadecodigo.bootcamp.concurrency.bqueue;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Blocking Queue
@@ -12,7 +9,7 @@ import java.util.List;
  */
 public class BQueue<T> {
 
-    private final LinkedList<T> list;
+    private final Queue<T> queue;
 
     private final int limit;
 
@@ -23,7 +20,7 @@ public class BQueue<T> {
      */
     public BQueue(int limit) {
 
-        list = new LinkedList<>();
+        queue = new LinkedList<>();
 
         this.limit = limit;
 
@@ -37,10 +34,7 @@ public class BQueue<T> {
      */
     public synchronized void offer(T data) {
 
-        while (getSize() == getLimit()) {
-
-            System.out.println("Queue is full, waiting...");
-
+        while (queue.size() == limit) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -48,9 +42,7 @@ public class BQueue<T> {
             }
         }
 
-        System.out.println(Thread.currentThread().getName() + " added: " + data);
-
-        list.add(data);
+        queue.offer(data);
 
         notifyAll();
 
@@ -64,10 +56,7 @@ public class BQueue<T> {
      */
     public synchronized T poll() {
 
-        while (getSize() == 0) {
-
-            System.out.println("Queue is empty, waiting...");
-
+        while (queue.size() == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -75,13 +64,11 @@ public class BQueue<T> {
             }
         }
 
-        T removedIndex = list.remove();
-
-        System.out.println(Thread.currentThread().getName() + " removed: " + removedIndex);
+        T value = queue.poll();
 
         notifyAll();
 
-        return removedIndex;
+        return value;
 
     }
 
@@ -90,10 +77,9 @@ public class BQueue<T> {
      *
      * @return the number of elements
      */
-    public int getSize() {
-        //System.out.println("Tamanho: " + list.size());
+    public synchronized int getSize() {
 
-        return list.size();
+        return queue.size();
 
     }
 

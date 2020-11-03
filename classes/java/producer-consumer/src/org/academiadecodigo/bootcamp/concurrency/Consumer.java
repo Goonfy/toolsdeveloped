@@ -22,7 +22,13 @@ public class Consumer implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < elementNum; i++) {
-            queue.poll();
+            synchronized (queue) {
+                System.out.println(Thread.currentThread().getName() + " removed: " + queue.poll());
+
+                if (queue.getSize() == 0) {
+                    System.out.println("Queue is empty, i'm waiting...");
+                }
+            }
         }
     }
 }

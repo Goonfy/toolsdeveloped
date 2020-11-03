@@ -24,8 +24,15 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < elementNum; i++) {
-            queue.offer(new Random().nextInt(20));
+            synchronized (queue) {
+                queue.offer(i);
+
+                System.out.println(Thread.currentThread().getName() + " added: " + i);
+
+                if (queue.getSize() == queue.getLimit()) {
+                    System.out.println("Queue is full, i'm waiting...");
+                }
+            }
         }
     }
-
 }
