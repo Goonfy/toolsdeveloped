@@ -1,5 +1,10 @@
 package org.academiadecodigo.bootcamp.concurrency.bqueue;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Blocking Queue
  *
@@ -7,10 +12,9 @@ package org.academiadecodigo.bootcamp.concurrency.bqueue;
  */
 public class BQueue<T> {
 
-    private T head;
+    private final LinkedList<T> list;
 
     private final int limit;
-    private int size;
 
     /**
      * Constructs a new queue with a maximum size
@@ -18,6 +22,8 @@ public class BQueue<T> {
      * @param limit the queue size
      */
     public BQueue(int limit) {
+
+        list = new LinkedList<>();
 
         this.limit = limit;
 
@@ -31,8 +37,9 @@ public class BQueue<T> {
      */
     public synchronized void offer(T data) {
 
-        while (getSize() == 1) {
-            System.out.println("Queue is full");
+        while (getSize() == getLimit()) {
+
+            System.out.println("Queue is full, waiting...");
 
             try {
                 wait();
@@ -43,9 +50,7 @@ public class BQueue<T> {
 
         System.out.println(Thread.currentThread().getName() + " added: " + data);
 
-        head = data;
-
-        size++;
+        list.add(data);
 
         notifyAll();
 
@@ -60,7 +65,9 @@ public class BQueue<T> {
     public synchronized T poll() {
 
         while (getSize() == 0) {
-            System.out.println("Queue is empty");
+
+            System.out.println("Queue is empty, waiting...");
+
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -68,13 +75,13 @@ public class BQueue<T> {
             }
         }
 
-        System.out.println(Thread.currentThread().getName() + " removed: " + head);
+        T removedIndex = list.remove();
 
-        size--;
+        System.out.println(Thread.currentThread().getName() + " removed: " + removedIndex);
 
         notifyAll();
 
-        return head;
+        return removedIndex;
 
     }
 
@@ -83,9 +90,10 @@ public class BQueue<T> {
      *
      * @return the number of elements
      */
-    public synchronized int getSize() {
+    public int getSize() {
+        //System.out.println("Tamanho: " + list.size());
 
-        return size;
+        return list.size();
 
     }
 

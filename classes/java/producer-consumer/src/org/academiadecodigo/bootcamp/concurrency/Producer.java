@@ -2,6 +2,8 @@ package org.academiadecodigo.bootcamp.concurrency;
 
 import org.academiadecodigo.bootcamp.concurrency.bqueue.BQueue;
 
+import java.util.Random;
+
 /**
  * Produces and stores integers into a blocking queue
  */
@@ -22,7 +24,7 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < elementNum; i++) {
-            queue.offer(i);
+            queue.offer(new Random().nextInt(20));
         }
     }
 
