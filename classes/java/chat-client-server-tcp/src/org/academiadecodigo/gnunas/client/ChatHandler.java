@@ -1,42 +1,41 @@
 package org.academiadecodigo.gnunas.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class ChatHandler implements Runnable {
     private final Socket clientSocket;
-    private final Client client;
 
-    public ChatHandler(Socket clientSocket, Client client) {
+    public ChatHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
-        this.client = client;
     }
 
-    private BufferedReader receivePacket() throws IOException {
-        return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    private InputStream receivePacketFromServer() throws IOException {
+        return clientSocket.getInputStream();
     }
 
-    protected void sendPacket(byte[] input) throws IOException {
-        PrintWriter fileWriter = new PrintWriter(clientSocket.getOutputStream(), true);
-        fileWriter.println(new String(input));
+    private String decodePacketFromServer() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(receivePacketFromServer()));
+        return bufferedReader.readLine();
+    }
+
+    protected void sendPacketToServer(byte[] input) throws IOException {
+        clientSocket.getOutputStream().write(input);
+        clientSocket.getOutputStream().write("\n".getBytes());
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                BufferedReader receivedData = receivePacket();
-                String receivedMessage = receivedData.readLine();
+                String message = decodePacketFromServer();
 
-                if (receivedMessage == null) {
+                if (message == null) {
                     System.out.println("Connection terminated, goodbye...");
                     System.exit(0);
                 }
 
-                System.out.println(receivedMessage);
+                System.out.println(message);
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

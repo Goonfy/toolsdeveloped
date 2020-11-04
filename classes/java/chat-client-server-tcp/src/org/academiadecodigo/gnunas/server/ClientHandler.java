@@ -9,20 +9,18 @@ public class ClientHandler implements Runnable {
     private final Socket clientSocket;
     private final Server server;
 
-    public ClientHandler(Socket clientSocket, Server server) {
+    private final CommandListener commandListener;
+
+    public ClientHandler(Socket clientSocket, Server server, CommandListener commandListener) {
         this.clientSocket = clientSocket;
         this.server = server;
+        this.commandListener = commandListener;
     }
 
     @Override
     public void run() {
         try {
-            String user = registerNewClient();
-            if (user == null) {
-                return;
-            }
-
-            handle(user);
+            handle(registerNewClient());
 
             server.disconnect(clientSocket);
         } catch (IOException e) {
@@ -31,11 +29,14 @@ public class ClientHandler implements Runnable {
     }
 
     private void handle(String username) throws IOException {
-        while (true) {
-            BufferedReader bufferedReader = server.receivePacket(clientSocket);
-            String message = bufferedReader.readLine();
+        if (username == null) {
+            return;
+        }
 
-            if (message == null || server.logout(clientSocket, message)) {
+        while (true) {
+            String message = server.decodePacketFrom(clientSocket);
+
+            if (message == null) {
                 break;
             }
 
@@ -45,17 +46,18 @@ public class ClientHandler implements Runnable {
 
             message = username + ": " + message;
             System.out.println(message);
-            server.sendPacketToAll(message);
+            server.sendPacketToAll(message.getBytes());
         }
     }
 
     private String registerNewClient() throws IOException {
-        server.sendPacketTo(clientSocket, "Please write an username and then click enter...");
+        server.sendPacketTo(clientSocket, "Please write an username and then click enter...".getBytes());
 
-        BufferedReader bufferedReader = server.receivePacket(clientSocket);
-        String username = bufferedReader.readLine();
+        String username = server.decodePacketFrom(clientSocket);
 
         if (username == null || username.isEmpty() || server.usernameExists(username)) {
+            server.sendPacketTo(clientSocket, ("User with same name already connected " +
+                    "or you entered an empty username, try with different name...").getBytes());
             return null;
         }
 

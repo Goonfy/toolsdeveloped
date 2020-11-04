@@ -23,8 +23,8 @@ public class Client {
 
         ChatHandler chatHandler;
 
-        ExecutorService fixedPool = Executors.newFixedThreadPool(1);
-        fixedPool.submit(chatHandler = new ChatHandler(clientSocket, this));
+        ExecutorService fixedPool = Executors.newSingleThreadExecutor();
+        fixedPool.submit(chatHandler = new ChatHandler(clientSocket));
 
         new InputHandler(chatHandler).init();
     }

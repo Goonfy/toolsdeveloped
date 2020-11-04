@@ -13,7 +13,7 @@ public class InputHandler {
         try {
             while (true) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                chatHandler.sendPacket(reader.readLine().getBytes());
+                chatHandler.sendPacketToServer(reader.readLine().getBytes());
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

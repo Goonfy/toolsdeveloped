@@ -19,4 +19,9 @@ public class User {
     protected Socket getClientSocket() {
         return clientSocket;
     }
+
+    @Override
+    public String toString() {
+        return username;
+    }
 }
