@@ -17,7 +17,7 @@ public class ServerLauncher {
             serverSocket = new ServerSocket(PORT_NUMBER);
             new Server(serverSocket).start();
         } catch (IOException e) {
-            System.out.println("Cannot start the server: " + e.getMessage());
+            System.out.println(e.getMessage());
         } finally {
            close(serverSocket);
         }
@@ -27,7 +27,7 @@ public class ServerLauncher {
         try {
             Objects.requireNonNull(serverSocket).close();
         } catch (IOException e) {
-            System.out.println("Server closed successfully: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }

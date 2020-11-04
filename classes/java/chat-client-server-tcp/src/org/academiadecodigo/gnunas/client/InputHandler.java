@@ -1,24 +1,23 @@
 package org.academiadecodigo.gnunas.client;
 
-import java.io.IOException;
+import java.io.*;
 
-public class InputHandler implements Runnable {
-    private final byte[] message;
+public class InputHandler {
+    private final ChatHandler chatHandler;
 
-    public InputHandler() {
-        message = new byte[1024];
+    public InputHandler(ChatHandler chatHandler) {
+        this.chatHandler = chatHandler;
     }
 
-    public byte[] getInput() {
-        return message;
-    }
-
-    @Override
-    public void run() {
+    public void init() {
         try {
-            System.in.read(message);
+            while (true) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                chatHandler.sendPacket(reader.readLine().getBytes());
+            }
         } catch (IOException e) {
-            System.out.println("Input error " + e.getMessage());
+            System.out.println(e.getMessage());
         }
+
     }
 }

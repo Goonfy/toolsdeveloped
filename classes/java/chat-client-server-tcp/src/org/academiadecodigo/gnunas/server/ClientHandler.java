@@ -2,12 +2,8 @@ package org.academiadecodigo.gnunas.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
+
 
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -21,37 +17,50 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            server.connect(clientSocket);
-
-            while (true) {
-
-                BufferedReader bufferedReader = receivePacket();
-                String message = bufferedReader.readLine();
-
-                if (message == null) {
-                    break;
-                }
-
-                System.out.println("Received Message: " + message);
-
-                sendPacket(message);
-
+            String user = registerNewClient();
+            if (user == null) {
+                return;
             }
+
+            handle(user);
 
             server.disconnect(clientSocket);
         } catch (IOException e) {
-            System.out.println("Error communicating to server " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
-    private BufferedReader receivePacket() throws IOException {
-        return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    private void handle(String username) throws IOException {
+        while (true) {
+            BufferedReader bufferedReader = server.receivePacket(clientSocket);
+            String message = bufferedReader.readLine();
+
+            if (message == null || server.logout(clientSocket, message)) {
+                break;
+            }
+
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            message = username + ": " + message;
+            System.out.println(message);
+            server.sendPacketToAll(message);
+        }
     }
 
-    private void sendPacket(String message) throws IOException {
-        for (Socket clientSocket : server.getConnectedClients()) {
-            PrintWriter fileWriter = new PrintWriter(clientSocket.getOutputStream(), true);
-            fileWriter.println(message);
+    private String registerNewClient() throws IOException {
+        server.sendPacketTo(clientSocket, "Please write an username and then click enter...");
+
+        BufferedReader bufferedReader = server.receivePacket(clientSocket);
+        String username = bufferedReader.readLine();
+
+        if (username == null || username.isEmpty() || server.usernameExists(username)) {
+            return null;
         }
+
+        server.connect(clientSocket, username);
+
+        return username;
     }
 }

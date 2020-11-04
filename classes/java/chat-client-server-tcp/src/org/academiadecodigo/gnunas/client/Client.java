@@ -12,9 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Client {
-
     private final Socket clientSocket;
-    private InputHandler inputHandler;
 
     public Client(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -23,16 +21,11 @@ public class Client {
     public void start() {
         System.out.println("Connected to Server");
 
-        ExecutorService fixedPool = Executors.newFixedThreadPool(2);
+        ChatHandler chatHandler;
 
-        while (true) {
-            fixedPool.submit(inputHandler = new InputHandler());
+        ExecutorService fixedPool = Executors.newFixedThreadPool(1);
+        fixedPool.submit(chatHandler = new ChatHandler(clientSocket, this));
 
-            fixedPool.submit(new ChatHandler(clientSocket, this));
-        }
-    }
-
-    protected byte[] getInput() {
-        return inputHandler.getInput();
+        new InputHandler(chatHandler).init();
     }
 }

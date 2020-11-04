@@ -15,31 +15,31 @@ public class ChatHandler implements Runnable {
         this.client = client;
     }
 
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                System.out.println("test");
-
-                BufferedReader receivedData = receivePacket();
-                String receivedMessage = receivedData.readLine();
-                System.out.println(receivedMessage);
-
-                if (client.getInput().length > 0) {
-                    sendPacket(client.getInput());
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Cannot send or receive data " + e.getMessage());
-        }
-    }
-
     private BufferedReader receivePacket() throws IOException {
         return new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    private void sendPacket(byte[] input) throws IOException {
+    protected void sendPacket(byte[] input) throws IOException {
         PrintWriter fileWriter = new PrintWriter(clientSocket.getOutputStream(), true);
         fileWriter.println(new String(input));
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                BufferedReader receivedData = receivePacket();
+                String receivedMessage = receivedData.readLine();
+
+                if (receivedMessage == null) {
+                    System.out.println("Connection terminated, goodbye...");
+                    System.exit(0);
+                }
+
+                System.out.println(receivedMessage);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

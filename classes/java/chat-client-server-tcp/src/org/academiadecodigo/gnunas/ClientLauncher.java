@@ -17,17 +17,19 @@ public class ClientLauncher {
             clientSocket = new Socket(HOST_NAME, PORT_NUMBER);
             new Client(clientSocket).start();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
-            close(clientSocket);
+            if (clientSocket != null) {
+                close(clientSocket);
+            }
         }
     }
 
     private static void close(Socket clientSocket) {
         try {
-            Objects.requireNonNull(clientSocket).close();
+            clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
