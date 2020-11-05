@@ -1,6 +1,5 @@
 package org.academiadecodigo.gnunas.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -40,24 +39,24 @@ public class ClientHandler implements Runnable {
                 break;
             }
 
-            if (message.isEmpty()) {
+            if (message.isEmpty() || commandListener.check(username, message)) {
                 continue;
             }
 
             message = username + ": " + message;
             System.out.println(message);
-            server.sendPacketToAll(message.getBytes());
+            server.sendMessagePacketToAll(message);
         }
     }
 
     private String registerNewClient() throws IOException {
-        server.sendPacketTo(clientSocket, "Please write an username and then click enter...".getBytes());
+        server.sendMessagePacketTo(clientSocket, "Please write an username and then click enter...");
 
         String username = server.decodePacketFrom(clientSocket);
 
-        if (username == null || username.isEmpty() || server.usernameExists(username)) {
-            server.sendPacketTo(clientSocket, ("User with same name already connected " +
-                    "or you entered an empty username, try with different name...").getBytes());
+        if (username == null || username.isEmpty() || server.getUser(username) != null) {
+            server.sendMessagePacketTo(clientSocket, ("User with same name already connected " +
+                    "or you entered an empty username, try with different name..."));
             return null;
         }
 

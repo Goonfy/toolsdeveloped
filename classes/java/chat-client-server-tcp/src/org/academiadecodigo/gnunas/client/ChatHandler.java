@@ -1,34 +1,22 @@
 package org.academiadecodigo.gnunas.client;
 
+import org.academiadecodigo.gnunas.server.Server;
+
 import java.io.*;
 import java.net.Socket;
 
 public class ChatHandler implements Runnable {
-    private final Socket clientSocket;
+    private final Client client;
 
-    public ChatHandler(Socket clientSocket) {
-        this.clientSocket = clientSocket;
-    }
-
-    private InputStream receivePacketFromServer() throws IOException {
-        return clientSocket.getInputStream();
-    }
-
-    private String decodePacketFromServer() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(receivePacketFromServer()));
-        return bufferedReader.readLine();
-    }
-
-    protected void sendPacketToServer(byte[] input) throws IOException {
-        clientSocket.getOutputStream().write(input);
-        clientSocket.getOutputStream().write("\n".getBytes());
+    public ChatHandler(Client client) {
+        this.client = client;
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                String message = decodePacketFromServer();
+                String message = client.decodePacketFromServer();
 
                 if (message == null) {
                     System.out.println("Connection terminated, goodbye...");

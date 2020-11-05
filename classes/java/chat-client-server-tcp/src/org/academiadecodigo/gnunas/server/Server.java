@@ -34,46 +34,38 @@ public class Server {
     }
 
     protected String decodePacketFrom(Socket clientSocket) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(receivePacketFrom(clientSocket)));
-
-        char[] buffer = new char[1024];
-        int i = bufferedReader.read(buffer);
-
-        return new String(buffer);
-
-        /*BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(receivePacketFrom(clientSocket)));
-        return bufferedReader.readLine();*/
+        return new BufferedReader(new InputStreamReader(receivePacketFrom(clientSocket))).readLine();
     }
 
-    protected void sendPacketToAll(byte[] message) throws IOException {
+    protected void sendMessagePacketToAll(String message) throws IOException {
         for (User user : getConnectedClients()) {
-            sendPacketTo(user.getClientSocket(), message);
+            sendMessagePacketTo(user.getClientSocket(), message);
         }
     }
 
-    protected void sendPacketTo(Socket clientSocket, byte[] message) throws IOException {
+    protected void sendMessagePacketTo(Socket clientSocket, String message) throws IOException {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(clientSocket.getOutputStream());
-        bufferedOutputStream.write(message);
-        bufferedOutputStream.write("\n".getBytes());
+        bufferedOutputStream.write((message + "\n").getBytes());
         bufferedOutputStream.flush();
-
-        //clientSocket.getOutputStream().write(message);
-        //clientSocket.getOutputStream().write("\n".getBytes());
     }
 
     protected void connect(Socket clientSocket, String username) throws IOException {
         String message = "Client " + username + " Connected";
         System.out.println(message);
-        sendPacketToAll(message.getBytes());
+        sendMessagePacketToAll(message);
 
         connectedClients.add(new User(clientSocket, username));
 
         String welcomeMessage = "Welcome to this amazing chat ma friend... " +
                 "Online users: " + connectedClients.toString();
-        sendPacketTo(clientSocket, welcomeMessage.getBytes());
+        sendMessagePacketTo(clientSocket, welcomeMessage);
     }
 
     protected void disconnect(Socket clientSocket) throws IOException {
+        if (clientSocket == null) {
+            return;
+        }
+
         for (User user : connectedClients) {
             if (user.getClientSocket() != clientSocket) {
                 continue;
@@ -84,7 +76,7 @@ public class Server {
 
             connectedClients.remove(user);
 
-            sendPacketToAll(message.getBytes());
+            sendMessagePacketToAll(message);
 
             break;
         }
@@ -92,14 +84,14 @@ public class Server {
         clientSocket.close();
     }
 
-    protected boolean usernameExists(String username) {
+    protected User getUser(String username) {
         for (User user : connectedClients) {
             if (user.getUsername().equals(username)) {
-                return true;
+                return user;
             }
         }
 
-        return false;
+        return null;
     }
 
     protected List<User> getConnectedClients() {

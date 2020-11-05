@@ -3,17 +3,17 @@ package org.academiadecodigo.gnunas.client;
 import java.io.*;
 
 public class InputHandler {
-    private final ChatHandler chatHandler;
+    private final Client client;
 
-    public InputHandler(ChatHandler chatHandler) {
-        this.chatHandler = chatHandler;
+    public InputHandler(Client client) {
+        this.client = client;
     }
 
     public void init() {
         try {
             while (true) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                chatHandler.sendPacketToServer(reader.readLine().getBytes());
+                client.sendMessagePacketToServer(reader.readLine());
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

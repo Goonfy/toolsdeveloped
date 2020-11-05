@@ -3,12 +3,16 @@ package org.academiadecodigo.gnunas.server;
 import java.net.Socket;
 
 public class User {
-    private final String username;
+    private String username;
 
     private final Socket clientSocket;
 
     public User(Socket clientSocket, String username) {
         this.clientSocket = clientSocket;
+        this.username = username;
+    }
+
+    public void setUsername(String username) {
         this.username = username;
     }
 
