@@ -6,6 +6,7 @@ import org.academiadecodigo.bootcamp.utils.Security;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class JdbcUserService implements UserService {
 
@@ -17,10 +18,12 @@ public class JdbcUserService implements UserService {
 
     @Override
     public boolean authenticate(String username, String password) {
+        PreparedStatement statement = null;
+
         try {
             String query = "SELECT username, password FROM user WHERE username = ? AND password = ?";
 
-            PreparedStatement statement = dbConnection.prepareStatement(query);
+            statement = dbConnection.prepareStatement(query);
 
             statement.setString(1, username);
             statement.setString(2, Security.getHash(password));
@@ -28,6 +31,8 @@ public class JdbcUserService implements UserService {
             return statement.executeQuery().next();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            Optional.ofNullable(statement).ifPresent(this::close);
         }
 
         return false;
@@ -35,10 +40,12 @@ public class JdbcUserService implements UserService {
 
     @Override
     public void add(User user) {
+        PreparedStatement statement = null;
+
         try {
             String queryInsert = "INSERT INTO user (username, password, email, firstname, lastname, phone) VALUES (?, ?, ?, ?, ?, ?)";
 
-            PreparedStatement statement = dbConnection.prepareStatement(queryInsert);
+            statement = dbConnection.prepareStatement(queryInsert);
 
             if (findByName(user.getUsername()) != null) {
                 return;
@@ -54,17 +61,21 @@ public class JdbcUserService implements UserService {
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            Optional.ofNullable(statement).ifPresent(this::close);
         }
     }
 
     @Override
     public User findByName(String username) {
+        PreparedStatement statement = null;
+
         User user = null;
 
         try {
             String query = "SELECT * FROM user WHERE username = ?";
 
-            PreparedStatement statement = dbConnection.prepareStatement(query);
+            statement = dbConnection.prepareStatement(query);
 
             statement.setString(1, username);
 
@@ -78,6 +89,8 @@ public class JdbcUserService implements UserService {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            Optional.ofNullable(statement).ifPresent(this::close);
         }
 
         return user;
@@ -85,13 +98,14 @@ public class JdbcUserService implements UserService {
 
     @Override
     public List<User> findAll() {
+        PreparedStatement statement = null;
 
         List<User> list = new LinkedList<>();
 
         try {
             String query = "SELECT * FROM user";
 
-            PreparedStatement statement = dbConnection.prepareStatement(query);
+            statement = dbConnection.prepareStatement(query);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -102,6 +116,8 @@ public class JdbcUserService implements UserService {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            Optional.ofNullable(statement).ifPresent(this::close);
         }
 
         return list;
@@ -109,12 +125,14 @@ public class JdbcUserService implements UserService {
 
     @Override
     public int count() {
+        PreparedStatement statement = null;
+
         int result = 0;
 
         try {
             String query = "SELECT COUNT(*) FROM user";
 
-            PreparedStatement statement = dbConnection.prepareStatement(query);
+            statement = dbConnection.prepareStatement(query);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -126,8 +144,18 @@ public class JdbcUserService implements UserService {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            Optional.ofNullable(statement).ifPresent(this::close);
         }
 
         return result;
+    }
+
+    private void close(PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

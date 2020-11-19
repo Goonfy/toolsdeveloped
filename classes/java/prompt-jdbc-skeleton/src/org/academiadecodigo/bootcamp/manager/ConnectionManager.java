@@ -3,6 +3,7 @@ package org.academiadecodigo.bootcamp.manager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class ConnectionManager {
 
@@ -15,12 +16,13 @@ public class ConnectionManager {
     public Connection getConnection() {
 
         try {
-            if (connection == null) {
+            if (!Optional.ofNullable(connection).isPresent()) {
                 connection = DriverManager.getConnection(dbUrl, user, pass);
             }
         } catch (SQLException ex) {
             System.out.println("Failure to connect to database : " + ex.getMessage());
         }
+
         return connection;
     }
 

@@ -15,6 +15,9 @@ import org.academiadecodigo.bootcamp.view.MainView;
 import org.academiadecodigo.bootcamp.view.UserDetailsView;
 import org.academiadecodigo.bootcamp.view.UserListView;
 
+import java.sql.Connection;
+import java.util.Optional;
+
 public class App {
 
     public static void main(String[] args) {
@@ -29,7 +32,9 @@ public class App {
         UserDetailsView userDetailsView = new UserDetailsView();
         Prompt prompt = new Prompt(System.in, System.out);
 
-        UserService userService = new JdbcUserService(new ConnectionManager().getConnection());
+        ConnectionManager connectionManager = new ConnectionManager();
+        UserService userService = new JdbcUserService(connectionManager.getConnection());
+        mainController.setConnectionManager(connectionManager);
         userService.add(new User("rui", "ferrao@academiadecodigo.org", Security.getHash("academiadecodigo"),
                 "Rui", "Ferrão", "912345678"));
         userService.add(new User("faustino", "faustino@academiadecodigo.org", Security.getHash("academiadecodigo"),
