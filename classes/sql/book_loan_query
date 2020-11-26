@@ -1,0 +1,11 @@
+USE book_loan;
+SELECT author FROM books_inventory WHERE author = 'leo tolstoi';
+SELECT author FROM books_inventory WHERE author LIKE = '%tolstoi%';
+SELECT COUNT (return_status) FROM reservations WHERE return_status = 0;
+SELECT publisher FROM books_inventory WHERE title LIKE = '%o primo basilio%';
+SELECT u.name FROM reservations AS r, users AS u, books_inventory AS books_inventory
+WHERE u.id = r.user_id AND r.book_id = b.id AND b.year < 1974;
+SELECT u.name, b.title FROM reservations AS r, users AS u, books_inventory AS books_inventory
+WHERE u.id = r.user_id AND r.book_id = b.id AND b.year < 1974;
+UPDATE reservations SET return_status = 1 WHERE book_id = 2 AND pickup_date = '2015-09-11';
+SELECT * FROM reservations WHERE return_status = 0;
