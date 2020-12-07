@@ -2,34 +2,38 @@
  * Reduce duplicate characters to a desired minimum
  */
 exports.reduceString = function(str, amount) {
-    let arr2 = [];
+    let reducedStrings = [];
+    let lastString = "";
 
     for (let index = 0; index < str.length; index++) {
         let numberOfTimes = 0;
 
-        for (let index2 = 0; index2 < str.length; index2++) {
-
-            if (numberOfTimes >= amount && !arr2.includes(str[index])) {
-                break;
-            }
-
-            if (str[index] === str[index2]) {                
-                numberOfTimes += 1;
-                arr2.push(str[index]);
-            }
+        if (lastString === str[index]) {
+            continue;
         }
 
-        
+        for (let index2 = 0; index2 < str.length; index2++) {
+
+            if (str[index] === str[index2]) {                
+                numberOfTimes++;
+                reducedStrings.push(str[index]);
+            }
+
+            if (numberOfTimes >= amount) {
+                lastString = str[index];
+                break;
+            }
+        }
     }
 
-    return arr2;
+    return reducedStrings.join('');
 };
 
 /**
  * Wrap lines at a given number of columns without breaking words
  */
 exports.wordWrap = function(str, cols) {
-
+    return str.split(" ").map(e => e += "\n").join("");
 };
 
 /**
