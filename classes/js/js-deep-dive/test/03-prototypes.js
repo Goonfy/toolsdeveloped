@@ -47,7 +47,7 @@ describe('objects', function() {
         expect(objectsAnswers.iterate(obj)).to.eql(['name: Rui', 'age: 43']);
     });
 
-    it.only('you should be able to extend the string object with a repeatify method', function() {
+    it('you should be able to extend the string object with a repeatify method', function() {
 
         objectsAnswers.extendString();
         expect('123'.repeatify(3)).to.equal('123123123');

@@ -5,5 +5,26 @@
  * stop - stop counting time
  * reset - sets seconds elapsed to zero
  */
-exports.createStopWatch = function() {
+exports.createStopWatch = function () {
+    let time = 0;
+
+    let timer;
+
+    return {
+        getTime: function () {
+            return time;
+        },
+            
+        start: function () {
+            timer = setInterval(function(){ time++; }, 1000);
+        },
+    
+        stop: function () {
+            clearInterval(timer);
+        },
+    
+        reset: function () {
+            time = 0;
+        }
+    }
 };

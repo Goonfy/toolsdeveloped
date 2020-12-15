@@ -8,7 +8,7 @@ exports.createDelegate = function (person) {
     p.name = person.name;
     p.greeting = person.greeting;
     p.say = person.say;
-    p.code = function () { };
+    p.code = function () {};
 
     return p;
 };
@@ -27,10 +27,9 @@ exports.borrowSayMethod = function (person, company) {
  * returning an array of key: value strings
  */
 exports.iterate = function (obj) {
-    return Array.of(
-        'name: ' + obj.name,
-        'age: ' + obj.age
-    );
+    return Object.entries(obj).map(function (entrie) {
+        return entrie[0] + ": " + entrie[1];
+    });
 };
 
 /**
@@ -42,16 +41,17 @@ exports.iterate = function (obj) {
  * String already contains a repeat method, let's NOT use that one.
  */
 exports.extendString = function () {
-    console.log(this);
 
-    String.prototype.repeatify = function (n) {
-        let joinedStrings = "";
+    if (String.prototype.repeatify === undefined) {
+        String.prototype.repeatify = function (n) {
+            let joinedStrings = "";
 
-        while (n !== 0) {
-            n--;
-            joinedStrings += this;
-        }
+            while (n !== 0) {
+                n--;
+                joinedStrings += this;
+            }
 
-        return joinedStrings;
-    };
+            return joinedStrings;
+        };
+    }
 };

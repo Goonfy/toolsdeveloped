@@ -72,7 +72,9 @@ exports.createAddArgumentsFunction = function (fn) {
     args.shift();
 
     return function () {
-        args.push(...arguments);
+        Array.from(arguments).forEach(function (i) {
+            args.push(i);
+        })
 
         return fn.apply(this, args);
     }
