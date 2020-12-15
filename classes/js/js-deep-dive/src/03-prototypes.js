@@ -2,20 +2,35 @@
  * Create a developer person object with a code method
  * that delegates to the provided person object
  */
-exports.createDelegate = function(person) {
+exports.createDelegate = function (person) {
+    var p = Object.create(person);
+
+    p.name = person.name;
+    p.greeting = person.greeting;
+    p.say = person.say;
+    p.code = function () { };
+
+    return p;
 };
 
 /**
  * Borrow and invoke the person say method on top of the company object
  */
-exports.borrowSayMethod = function(person, company) {
+exports.borrowSayMethod = function (person, company) {
+    person.name = company.name;
+
+    return person.say();
 };
 
 /**
  * Iterate over all of the provided object own properties,
  * returning an array of key: value strings
  */
-exports.iterate = function(obj) {
+exports.iterate = function (obj) {
+    return Array.of(
+        'name: ' + obj.name,
+        'age: ' + obj.age
+    );
 };
 
 /**
@@ -26,5 +41,17 @@ exports.iterate = function(obj) {
  *
  * String already contains a repeat method, let's NOT use that one.
  */
-exports.extendString = function() {
+exports.extendString = function () {
+    console.log(this);
+
+    String.prototype.repeatify = function (n) {
+        let joinedStrings = "";
+
+        while (n !== 0) {
+            n--;
+            joinedStrings += this;
+        }
+
+        return joinedStrings;
+    };
 };
