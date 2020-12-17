@@ -4,6 +4,7 @@ define(function () {
 
     internals.routes = {
         index: { hash: '#index', controller: 'index' },
+        info: { hash: '#info', controller: 'info' } 
     };
 
     internals.defaultRoute = internals.routes.index;
