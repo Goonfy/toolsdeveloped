@@ -4,6 +4,13 @@ define(['view/index'], function (indexView) {
 
 	//console.log(indexView);
 
+	externals.setData = function(data) {
+		console.log(data);
+		define(['controller/info'], function (controller) {
+			controller.data = data;
+        });
+	}
+
 	externals.init = function () {
 		fetch("https://shazam.p.rapidapi.com/search?term=wiz%20khalifa&locale=en-US&offset=0&limit=50",
 			{
@@ -36,7 +43,7 @@ define(['view/index'], function (indexView) {
 				})
 				.then(function (jsonData) {
 					jsonData.tracks.forEach(function (tracks) {
-						indexView.show(tracks);
+						indexView.show(tracks, externals.setData);
 					})
 				})	
 			})

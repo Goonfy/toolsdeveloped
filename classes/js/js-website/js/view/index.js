@@ -2,7 +2,7 @@ define(function () {
 	// public fields
 	var externals = {};
 
-	externals.show = function (data) {
+	externals.show = function (data, setData) {
 
 		var label = $('<label>').text('Artists');
 		var span = $('<span>').text(data.subtitle);
@@ -11,7 +11,7 @@ define(function () {
 		var content = $('<div>').addClass('rapper-content');
 		var content_header = $('<div>').addClass('rapper-content-header');
 		var link = $('<a>').attr('href', '#info').click(function () {
-			externals.data = data;
+			setData(data);
 		});
 		var title = $('<h3>').addClass('rapper-title').text(data.title);
 		var info = $('<div>').addClass('rapper-info');
